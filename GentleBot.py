@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from datetime import datetime
 import GentleBotData
+import asyncio
 
 description = '''A discord bot, mostly for learning the API.
 
@@ -18,13 +19,15 @@ chucklay@users.noreply.github.com'''
 client = discord.Client()
 
 @client.event
-async def on_ready():
+@asyncio.coroutine
+def on_ready():
 	print('Connected!')
 	print('Username: ' + client.user.name)
 	print('ID: ' + client.user.id)
 
 @client.event
-async def on_message(message):
+@asyncio.coroutine
+def on_message(message):
 	"""Handles all bot commands.
 
 	Current commands:
@@ -32,13 +35,13 @@ async def on_message(message):
 							   is running on. A timezone can be specified."""
 	if message.content.startswith('!time'):
 		time = None
-		if(message.content.split()[1] is str):
+		if(len(message.content.split()) > 1):
 			#Get time in timezone.
 			time = datetime.time(datetime.now, message.content.split()[1])
 		else:
 			time = datetime.now().time()
-		timestr = ('The current time is ' + time.hour() + ':' +
-					time.minute() + ':' + time.second())
-		tmp = await client.send_message(message.channel, timestr)
+		timestr = ('The current time is ' + str(time.hour) + ':' +
+					str(time.minute) + ':' + str(time.second))
+		tmp = yield from client.send_message(message.channel, timestr)
 
 client.run(GentleBotData.bot_token);
