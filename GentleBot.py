@@ -34,14 +34,9 @@ def on_message(message):
 		\"!time [timezone]\" - prints the current time on the machine the bot
 							   is running on. A timezone can be specified."""
 	if message.content.startswith('!time'):
-		time = None
-		if(len(message.content.split()) > 1):
-			#Get time in timezone.
-			time = datetime.time(datetime.now, message.content.split()[1])
-		else:
-			time = datetime.now().time()
+		time = datetime.now().time()
 		timestr = ('The current time is ' + str(time.hour) + ':' +
-					str(time.minute) + ':' + str(time.second))
+			    str(time.minute) + ':' + str(time.second))
 		tmp = yield from client.send_message(message.channel, timestr)
 
 client.run(GentleBotData.bot_token);
